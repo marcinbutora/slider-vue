@@ -1,13 +1,18 @@
 <template>
-  <ArrowButton :is-disabled="!isAbleToGoToPrevSlide" />
+  <ArrowButton @click="changeSlide(-1)" :is-disabled="!isAbleToGoToPrevSlide" />
   <BaseImage :file-name="fileName" :caption-text="captionText" />
-  <ArrowButton :is-disabled="!isAbleToGoToNextSlide" is-next />
+  <ArrowButton
+    @click="changeSlide(1)"
+    :is-disabled="!isAbleToGoToNextSlide"
+    is-next
+  />
 </template>
 
 <script>
 import BaseImage from "@/components/molecules/BaseImage.vue";
 import ArrowButton from "@/components/atoms/ArrowButton.vue";
 import { computed, ref } from "@vue/reactivity";
+import { onMounted, onUnmounted } from "@vue/runtime-core";
 
 export default {
   name: "BaseSlide",
@@ -32,6 +37,22 @@ export default {
       () => slideNumber.value !== numberOfImages
     );
 
+    onMounted(() => document.addEventListener("keydown", handleKeyDown));
+
+    onUnmounted(() => document.removeEventListener("keydown", handleKeyDown));
+
+    function handleKeyDown({ keyCode }) {
+      if (keyCode === 37 && isAbleToGoToPrevSlide.value) {
+        changeSlide(-1);
+      } else if (keyCode === 39 && isAbleToGoToNextSlide.value) {
+        changeSlide(1);
+      }
+    }
+
+    function changeSlide(param) {
+      slideNumber.value = slideNumber.value + param;
+    }
+
     const fileName = computed(() => `${slideNumber.value}.jpg`);
     const captionText = computed(
       () => `${slideNumber.value}/${numberOfImages}`
@@ -42,6 +63,7 @@ export default {
       isAbleToGoToNextSlide,
       fileName,
       captionText,
+      changeSlide,
     };
   },
 };
