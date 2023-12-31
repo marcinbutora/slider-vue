@@ -1,10 +1,27 @@
 <template>
-  <button class="arrow-button arrow-button--prev"></button>
+  <button
+    class="arrow-button"
+    :class="{
+      'arrow-button--prev': !isNext,
+      'arrow-button--next': isNext,
+      'arrow-button--disabled': isDisabled,
+    }"
+  ></button>
 </template>
 
 <script>
 export default {
   name: "ArrowButton",
+  props: {
+    isNext: {
+      type: Boolean,
+      default: false,
+    },
+    isDisabled: {
+      type: Boolean,
+      default: false,
+    },
+  },
 };
 </script>
 

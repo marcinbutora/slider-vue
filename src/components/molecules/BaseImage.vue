@@ -1,16 +1,28 @@
 <template>
   <figure>
-    <img :src="require('@/assets/img/1.jpg')" alt="Slide" class="image" />
-    <BaseCaption />
+    <img :src="require(`@/assets/img/${fileName}`)" alt="Slide" class="image" />
+    <BaseCaption :text="captionText" />
   </figure>
 </template>
 
 <script>
-import BaseCaption from "../atoms/BaseCaption.vue";
+import BaseCaption from "@/components/atoms/BaseCaption.vue";
 
 export default {
   name: "BaseImage",
-  components: { BaseCaption },
+  components: {
+    BaseCaption,
+  },
+  props: {
+    fileName: {
+      type: String,
+      required: true,
+    },
+    captionText: {
+      type: String,
+      required: true,
+    },
+  },
 };
 </script>
 
